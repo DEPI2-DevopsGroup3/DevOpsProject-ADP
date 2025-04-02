@@ -1,0 +1,41 @@
+- name: Install Jenkins on Ubuntu
+  hosts: all
+  become: yes
+  tasks:
+
+    - name: Install required dependencies
+      apt:
+        name: 
+          - wget
+          - gnupg
+          - fontconfig
+          - openjdk-17-jre
+        state: present
+        update_cache: yes
+
+    - name: Download Jenkins GPG key
+      shell: |
+        wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian/jenkins.io-2023.key
+      args:
+        creates: /usr/share/keyrings/jenkins-keyring.asc
+
+    - name: Add Jenkins repository
+      shell: |
+        echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian binary/" | tee /etc/apt/sources.list.d/jenkins.list
+      args:
+        creates: /etc/apt/sources.list.d/jenkins.list
+
+    - name: Update APT package list
+      apt:
+        update_cache: yes
+
+    - name: Install Jenkins
+      apt:
+        name: jenkins
+        state: present
+          
+    - name: Start and enable Jenkins service
+      systemd:
+        name: jenkins
+        state: started
+        enabled: yes

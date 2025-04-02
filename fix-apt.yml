@@ -1,0 +1,30 @@
+---
+- name: Fix broken APT configuration
+  hosts: all
+  become: yes
+  tasks:
+    - name: Check if problematic file exists
+      stat:
+        path: /etc/apt/apt.conf.d/99kubernetes
+      register: apt_conf
+
+    - name: Remove or fix broken APT config
+      block:
+        - name: Backup the file (optional)
+          copy:
+            src: /etc/apt/apt.conf.d/99kubernetes
+            dest: /etc/apt/apt.conf.d/99kubernetes.bak
+            remote_src: yes
+          when: apt_conf.stat.exists
+
+        - name: Remove the problematic file
+          file:
+            path: /etc/apt/apt.conf.d/99kubernetes
+            state: absent
+          when: apt_conf.stat.exists
+      rescue:
+        - name: Fallback - empty the file if removal fails
+          copy:
+            content: ""
+            dest: /etc/apt/apt.conf.d/99kubernetes
+          when: apt_conf.stat.exists
