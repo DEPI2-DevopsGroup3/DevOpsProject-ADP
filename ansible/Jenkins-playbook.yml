@@ -1,31 +1,33 @@
-- name: Install Jenkins on Ubuntu
+- name: Install and Configure Jenkins on Ubuntu
   hosts: all
-  become: yes
+  become: yes  # Run as sudo
+
   tasks:
+    - name: Update package lists
+      apt:
+        update_cache: yes
 
     - name: Install required dependencies
       apt:
-        name: 
-          - wget
+        name:
+          - openjdk-17-jdk  # Jenkins requires Java
+          - curl
           - gnupg
-          - fontconfig
-          - openjdk-17-jre
+          - wget
         state: present
-        update_cache: yes
 
-    - name: Download Jenkins GPG key
-      shell: |
-        wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian/jenkins.io-2023.key
-      args:
-        creates: /usr/share/keyrings/jenkins-keyring.asc
+    - name: Add Jenkins repository key
+      apt_key:
+        url: https://pkg.jenkins.io/debian/jenkins.io-2023.key
+        state: present
 
     - name: Add Jenkins repository
-      shell: |
-        echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian binary/" | tee /etc/apt/sources.list.d/jenkins.list
-      args:
-        creates: /etc/apt/sources.list.d/jenkins.list
+      apt_repository:
+        repo: "deb https://pkg.jenkins.io/debian-stable binary/"
+        state: present
+        filename: "jenkins"
 
-    - name: Update APT package list
+    - name: Update package lists after adding Jenkins repository
       apt:
         update_cache: yes
 
@@ -33,9 +35,25 @@
       apt:
         name: jenkins
         state: present
-          
-    - name: Start and enable Jenkins service
+
+    - name: Ensure Jenkins service is enabled and running
       systemd:
         name: jenkins
-        state: started
         enabled: yes
+        state: started
+
+    - name: Allow Jenkins through UFW firewall
+      ufw:
+        rule: allow
+        port: "8080"
+        proto: tcp
+
+    - name: Display Jenkins initial admin password
+      command: cat /var/lib/jenkins/secrets/initialAdminPassword
+      register: jenkins_password
+      changed_when: false
+
+    - name: Show Jenkins initial admin password
+      debug:
+        msg: "Jenkins initial admin password: {{ jenkins_password.stdout }}"
+
