@@ -10,7 +10,7 @@
     - name: Install required dependencies
       apt:
         name:
-          - openjdk-17-jdk  # Jenkins requires Java
+          - openjdk-8-jdk  # Jenkins requires Java
           - curl
           - gnupg
           - wget
