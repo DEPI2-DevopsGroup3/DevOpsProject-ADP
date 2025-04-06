@@ -1,5 +1,8 @@
 pipeline {
-    agent any
+    agent {
+     label 'local-agent'
+    }
+
 
     environment {
         IMAGE_NAME = 'fitness-web-app'
