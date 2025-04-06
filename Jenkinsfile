@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'local-agent'  // Ensure the Jenkins agent has Minikube and kubectl installed
+        label 'local-agent'  // Ensure Jenkins agent has Minikube and kubectl installed
     }
 
     environment {
@@ -45,17 +45,18 @@ pipeline {
                 script {
                     echo 'Checking Minikube status...'
 
-                    // Start Minikube if it's not running
+                    // Check if Minikube is running by attempting to start it
                     def status = sh(script: 'minikube status --format "{{.Host}}"', returnStdout: true).trim()
 
-                    if (status != 'Running') {
-                        echo 'Starting Minikube...'
+                    // If profile is not found, start Minikube to create the profile
+                    if (status == "Profile 'minikube' not found") {
+                        echo 'No Minikube profile found. Starting Minikube...'
                         sh 'minikube start'
                     } else {
-                        echo 'Minikube is already running.'
+                        echo 'Minikube is running.'
                     }
 
-                    // Ensure the kubectl context is set to Minikube
+                    // Set kubectl context to Minikube
                     echo 'Setting kubectl context to Minikube...'
                     sh 'kubectl config use-context minikube'
 
