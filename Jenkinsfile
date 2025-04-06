@@ -44,21 +44,8 @@ pipeline {
             steps {
                 script {
                     echo 'Checking Minikube status...'
-
-                    // Check if Minikube is running by attempting to start it
-                    def status = sh(script: 'minikube status --format "{{.Host}}"', returnStdout: true).trim()
-
-                    // If profile is not found, start Minikube to create the profile
-                    if (status == "Profile 'minikube' not found") {
-                        echo 'No Minikube profile found. Starting Minikube...'
-                        sh 'minikube start'
-                    } else {
-                        echo 'Minikube is running.'
-                    }
-
-                    // Set kubectl context to Minikube
-                    echo 'Setting kubectl context to Minikube...'
-                    sh 'kubectl config use-context minikube'
+                    sh 'minikube start'
+                    sh 'sleep 60s'
 
                     echo 'Deploying to Kubernetes...'
                     sh 'kubectl apply -f ./k8s/deployment.yaml'
