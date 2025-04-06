@@ -1,8 +1,7 @@
 pipeline {
     agent {
-     label 'local-agent'
+        label 'local-agent'  // Ensure the Jenkins agent has Minikube and kubectl installed
     }
-
 
     environment {
         IMAGE_NAME = 'fitness-web-app'
@@ -45,13 +44,15 @@ pipeline {
             steps {
                 script {
                     echo 'Checking Minikube status...'
-                    def status = sh(script: 'minikube status --format "{{.Host}}"', returnStdout: true).trim()
                     
-                    if (status != 'Running') {
-                        echo 'Starting Minikube...'
+                    // Check if the Minikube profile exists
+                    def profileExists = sh(script: 'minikube profile list', returnStdout: true).trim()
+                    
+                    if (!profileExists.contains('minikube')) {
+                        echo 'No Minikube profile found. Starting Minikube...'
                         sh 'minikube start'
                     } else {
-                        echo ' Minikube is already running.'
+                        echo 'Minikube profile found.'
                     }
 
                     echo 'Setting kubectl context to Minikube...'
@@ -64,4 +65,3 @@ pipeline {
         }
     }
 }
-
