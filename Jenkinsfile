@@ -44,6 +44,7 @@ pipeline {
             steps {
                 script {
                     echo 'Checking Minikube status...'
+                    sh 'minikube delete'
                     sh 'minikube start'
                     sh 'sleep 60s'
 
