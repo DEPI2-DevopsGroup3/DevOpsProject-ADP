@@ -1,35 +1,35 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app-name-deployment
+  name: fitness-web-app-deployment
   labels:
-    app: app-name
+    app: fitness-web-app
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: app-name
+      app: fitness-web-app
   template:
     metadata:
       labels:
-        app: app-name
+        app: fitness-web-app
     spec:
       containers:
-        - name: app-name
-          image: ahmedabduelkhaleq/app-name:latest
+        - name: fitness-web-app
+          image: ahmedabduelkhaleq/fitness-web-app:latest
           ports:
-            - containerPort: 8080
+            - containerPort: 8000
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: app-name-service
+  name: fitness-web-app-service
 spec:
   selector:
-    app: app-name
+    app: fitness-web-app
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 8080
+      targetPort: 8000
   type: ClusterIP
 

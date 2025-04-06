@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'our app name'
+        IMAGE_NAME = 'fitness-web-app'
     }
 
     stages {
