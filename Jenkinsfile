@@ -55,7 +55,7 @@ pipeline {
                     }
 
                     echo 'Setting kubectl context to Minikube...'
-                    sh 'kubectl config use-context minikube'
+                 //   sh 'kubectl config use-context minikube'
 
                     echo 'Deploying to Kubernetes...'
                     sh 'kubectl apply -f ./k8s/deployment.yaml'
