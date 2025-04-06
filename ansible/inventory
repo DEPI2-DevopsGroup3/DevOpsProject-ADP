@@ -1,2 +1,7 @@
 [devops_servers]
-192.168.88.130 ansible_python_interpreter=/usr/bin/python3 
+192.168.88.130 ansible_python_interpreter=/usr/bin/python3
+
+
+[local-agent-server] 
+192.168.88.131 ansible_python_interpreter=/usr/bin/python3
+
