@@ -85,4 +85,28 @@ pipeline {
             }
         }
     }
+
+post {
+  success {
+    slackSend(
+      channel: '#project-channel',
+      color: '#36a64f', // Green
+      message: ":white_check_mark: *Build SUCCESS* - `${env.JOB_NAME} #${env.BUILD_NUMBER}`\n<${env.BUILD_URL}|Click here to view the build>",
+      teamDomain: 'DEPI2-DevopsGroup3',
+      tokenCredentialId: 'slack-token'
+    )
+  }
+  failure {
+    slackSend(
+      channel: '#project-channel',
+      color: '#FF0000', // Red
+      message: ":x: *Build FAILURE* - `${env.JOB_NAME} #${env.BUILD_NUMBER}`\n<${env.BUILD_URL}|Click here to view the build>",
+      teamDomain: 'DEPI2-DevopsGroup3',
+      tokenCredentialId: 'slack-token'
+    )
+  }
+}
+
+
+
 }
