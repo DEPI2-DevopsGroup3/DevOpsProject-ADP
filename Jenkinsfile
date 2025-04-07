@@ -1,11 +1,13 @@
 pipeline {
-    agent any
+    agent {
+      label 'all-agents'
+    }
 
     environment {
-        IMAGE_NAME = 'fitness-web-app'
- CONTAINER_NAME = 'fitness-web-app'
-     HOST_PORT = 8000
-     CONTAINER_PORT = 8000
+       IMAGE_NAME = 'fitness-web-app'
+       CONTAINER_NAME = 'fitness-web-app'
+       HOST_PORT = 8000
+       CONTAINER_PORT = 8000
     }
 
     stages {
