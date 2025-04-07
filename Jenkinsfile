@@ -31,7 +31,7 @@ pipeline {
                         echo 'Logging into Docker Hub...'
                         sh 'docker login --username $USERNAME --password $PASSWORD'
 
-                        echo 'Tagging Docker image...'
+                        echo 'Tagging Docker image..'
                         sh "docker tag ${IMAGE_NAME} $USERNAME/${IMAGE_NAME}"
 
                         echo 'Pushing Docker image...'
