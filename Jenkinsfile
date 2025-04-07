@@ -56,6 +56,9 @@ pipeline {
                 echo 'Pulling Docker image...'
                 sh "docker pull ${fullImageName}"
 
+                echo 'Removing any existing container...'
+                sh "docker rm -f ${CONTAINER_NAME} || true"
+                
                 echo 'Running Docker container...'
                 sh """
                     docker run -d \
