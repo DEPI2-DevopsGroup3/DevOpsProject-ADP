@@ -6,8 +6,8 @@ pipeline {
     environment {
        IMAGE_NAME = 'fitness-web-app'
        CONTAINER_NAME = 'fitness-web-app'
-       HOST_PORT = 8000
-       CONTAINER_PORT = 8000
+       HOST_PORT = 80
+       CONTAINER_PORT = 80
     }
 
     stages {
