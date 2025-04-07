@@ -1,12 +1,12 @@
 pipeline {
-    agent any 
+    agent any
 
     environment {
-    IMAGE_NAME = "fitness-web-app"
-    CONTAINER_NAME = "fitness-web-app"
-    HOST_PORT = 8000
-    CONTAINER_PORT = 8000
-}
+        IMAGE_NAME = 'fitness-web-app'
+	CONTAINER_NAME = "fitness-web-app"
+    	HOST_PORT = 8000
+    	CONTAINER_PORT = 8000
+    }
 
     stages {
         stage('Build') {
@@ -18,28 +18,24 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
+        stage('Push') {
             steps {
                 script {
-            withCredentials([
-                usernamePassword(
-                    credentialsId: 'docker-hub',
-                    usernameVariable: 'USERNAME',
-                    passwordVariable: 'PASSWORD'
-                )
-            ]) {
-                def fullImageName = "${USERNAME}/fitness-web-app:latest"
+                    withCredentials([
+                        usernamePassword(
+                            credentialsId: 'docker-hub',
+                            usernameVariable: 'USERNAME',
+                            passwordVariable: 'PASSWORD'
+                        )
+                    ]) {
+                        echo 'Logging into Docker Hub...'
+                        sh 'docker login --username $USERNAME --password $PASSWORD'
 
-                echo 'Pulling Docker image...'
-                sh "docker pull ${fullImageName}"
+                        echo 'Tagging Docker image...'
+                        sh "docker tag ${IMAGE_NAME} $USERNAME/${IMAGE_NAME}"
 
-                echo 'Running Docker container...'
-                sh """
-                    docker run -d \
-                      --name ${CONTAINER_NAME} \
-                      -p ${HOST_PORT}:${CONTAINER_PORT} \
-                      ${fullImageName}
-                """
+                        echo 'Pushing Docker image...'
+                        sh "docker push $USERNAME/${IMAGE_NAME}"
                     }
                 }
             }
