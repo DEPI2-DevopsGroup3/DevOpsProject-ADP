@@ -2,7 +2,7 @@ pipeline {
     agent any 
 
     environment {
-        IMAGE_NAME = "fitness-web-app:latest"
+        IMAGE_NAME = "fitness-web-app"
         CONTAINER_NAME = "fitness-web-app"
         HOST_PORT = 8000  // Host machine port
         CONTAINER_PORT = 8000  // Container port (as per your image)
