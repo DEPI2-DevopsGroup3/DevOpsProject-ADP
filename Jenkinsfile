@@ -1,6 +1,6 @@
 pipeline {
     agent {
-      label 'all-agents'
+      label 'aws-agent'
     }
 
     environment {
