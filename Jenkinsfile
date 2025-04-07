@@ -4,7 +4,10 @@ pipeline {
     }
 
     environment {
-        IMAGE_NAME = 'fitness-web-app'
+        IMAGE_NAME = "ahmedabduelkhaleq/fitness-web-app:latest"
+        CONTAINER_NAME = "fitness-web-app"
+        HOST_PORT = 8000  // Host machine port
+        CONTAINER_PORT = 8000  // Container port (as per your image)
     }
 
     stages {
@@ -43,13 +46,28 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    echo 'Checking Minikube status...'
-                    sh 'minikube delete'
-                    sh 'minikube start'
-                    sh 'sleep 60s'
+                    // Pull the latest image
+                    sh "docker pull ${DOCKER_IMAGE}"
 
-                    echo 'Deploying to Kubernetes...'
-                    sh 'kubectl apply -f ./k8s/deployment.yaml'
+                    // Run the container
+                    sh """
+                        docker run -d \
+                          --name ${CONTAINER_NAME} \
+                          -p ${HOST_PORT}:${CONTAINER_PORT} \
+                          ${DOCKER_IMAGE}
+                    """
+                }
+            }
+        }
+
+        stage('Verify') {
+            steps {
+                script {
+                    // Check if container is running
+                    sh "docker ps --filter name=${CONTAINER_NAME}"
+
+                    // Optional: Test HTTP endpoint (adjust URL if needed)
+                    sh "curl -s http://localhost:${HOST_PORT} || true"
                 }
             }
         }
