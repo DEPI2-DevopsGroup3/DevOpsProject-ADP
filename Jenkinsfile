@@ -43,10 +43,10 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    echo 'Checking Minikube status...'
-                    sh 'minikube delete'
-                    sh 'minikube start'
-                    sh 'sleep 60s'
+                //    echo 'Checking Minikube status...'
+                //    sh 'minikube delete'
+                //    sh 'minikube start'
+                //    sh 'sleep 60s'
 
                     echo 'Deploying to Kubernetes...'
                     sh 'kubectl apply -f ./k8s/deployment.yaml'
