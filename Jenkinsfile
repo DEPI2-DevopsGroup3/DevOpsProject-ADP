@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-        label 'local-agent'  // Ensure Jenkins agent has Minikube and kubectl installed
-    }
+    agent any 
 
     environment {
         IMAGE_NAME = "ahmedabduelkhaleq/fitness-web-app:latest"
@@ -47,14 +45,14 @@ pipeline {
             steps {
                 script {
                     // Pull the latest image
-                    sh "docker pull ${DOCKER_IMAGE}"
+                    sh "docker pull ${IMAGE_NAME}"
 
                     // Run the container
                     sh """
                         docker run -d \
                           --name ${CONTAINER_NAME} \
                           -p ${HOST_PORT}:${CONTAINER_PORT} \
-                          ${DOCKER_IMAGE}
+                          ${IMAGE_NAME}
                     """
                 }
             }
