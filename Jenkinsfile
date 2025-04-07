@@ -21,13 +21,7 @@ pipeline {
         stage('Push') {
             steps {
                 script {
-                    withCredentials([
-                        usernamePassword(
-                            credentialsId: 'docker-hub',
-                            usernameVariable: 'USERNAME',
-                            passwordVariable: 'PASSWORD'
-                        )
-                    ]) {
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'Password', usernameVariable: 'Username')]) {
                         echo 'Logging into Docker Hub...'
                         sh 'docker login --username $USERNAME --password $PASSWORD'
 
