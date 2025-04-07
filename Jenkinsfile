@@ -3,9 +3,9 @@ pipeline {
 
     environment {
         IMAGE_NAME = 'fitness-web-app'
-	CONTAINER_NAME = "fitness-web-app"
-    	HOST_PORT = 8000
-    	CONTAINER_PORT = 8000
+ CONTAINER_NAME = 'fitness-web-app'
+     HOST_PORT = 8000
+     CONTAINER_PORT = 8000
     }
 
     stages {
@@ -42,18 +42,28 @@ pipeline {
         }
 
         stage('Deploy') {
-            steps {
-                script {
-                    // Pull the latest image
-                    sh "docker pull ${IMAGE_NAME}"
+    steps {
+        script {
+            withCredentials([
+                usernamePassword(
+                    credentialsId: 'docker-hub',
+                    usernameVariable: 'USERNAME',
+                    passwordVariable: 'PASSWORD'
+                )
+            ]) {
+                def fullImageName = "${USERNAME}/${IMAGE_NAME}"
 
-                    // Run the container
-                    sh """
-                        docker run -d \
-                          --name ${CONTAINER_NAME} \
-                          -p ${HOST_PORT}:${CONTAINER_PORT} \
-                          ${IMAGE_NAME}
-                    """
+                echo 'Pulling Docker image...'
+                sh "docker pull ${fullImageName}"
+
+                echo 'Running Docker container...'
+                sh """
+                    docker run -d \
+                      --name ${CONTAINER_NAME} \
+                      -p ${HOST_PORT}:${CONTAINER_PORT} \
+                      ${fullImageName}
+                """
+                    }
                 }
             }
         }
