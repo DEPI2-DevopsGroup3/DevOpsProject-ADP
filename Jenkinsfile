@@ -2,7 +2,9 @@ pipeline {
     agent {
       label 'aws-agent'
     }
-
+    triggers {
+        githubPush()  // listens for push events from GitHub webhook
+	}
     environment {
        IMAGE_NAME = 'fitness-web-app'
        CONTAINER_NAME = 'fitness-web-app'
