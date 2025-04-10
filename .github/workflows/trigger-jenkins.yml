@@ -1,9 +1,8 @@
 name: Trigger Jenkins Pipeline
 
 on:
-  push:
-    branches:
-      - main  # Adjust to the branch you prefer
+    pull_request:
+      types: [closed]  # Trigger the workflow when the PR is closed (merged or declined)
 
 jobs:
   trigger-jenkins:
@@ -13,7 +12,8 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
-    - name: Trigger Jenkins Job
+    - name: Check if PR is merged
+      if: github.event.pull_request.merged == true  # Only trigger if the PR is merged
       run: |
         curl -X POST "https://5bc8-197-35-71-163.ngrok-free.app/job/${{ secrets.JENKINS_JOB_NAME }}/build?token=${{ secrets.JENKINS_TOKEN }}" \
         --user ${{ secrets.JENKINS_USERNAME }}:${{ secrets.JENKINS_API_TOKEN }}
