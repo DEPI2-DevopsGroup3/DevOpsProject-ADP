@@ -43,8 +43,7 @@ resource "aws_instance" "example" {
   provisioner "local-exec" {
     command = <<EOT
       echo "[ec2]" > inventory.ini
-      echo "${self.public_ip} ansible_user=ec2-user ansible_ssh_private_key_file=${var.private_key_path}" >> inventory.ini
-      
+      echo "${self.public_ip} ansible_user=ubuntu ansible_ssh_private_key_file=${var.private_key_path}" >> inventory.ini
       
     EOT
     
