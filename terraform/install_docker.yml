@@ -1,0 +1,29 @@
+---
+- name: Install Docker on EC2
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install required packages
+      yum:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - yum-utils
+        - device-mapper-persistent-data
+        - lvm2
+
+    - name: Add Docker repo
+      get_url:
+        url: https://download.docker.com/linux/centos/docker-ce.repo
+        dest: /etc/yum.repos.d/docker-ce.repo
+
+    - name: Install Docker
+      yum:
+        name: docker
+        state: present
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
