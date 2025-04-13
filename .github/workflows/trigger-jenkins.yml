@@ -15,5 +15,5 @@ jobs:
     - name: Check if PR is merged
       if: github.event.pull_request.merged == true  # Only trigger if the PR is merged
       run: |
-        curl -X POST "https://0452-197-35-85-68.ngrok-free.app/job/${{ secrets.JENKINS_JOB_NAME }}/build?token=${{ secrets.JENKINS_TOKEN }}" \
+        curl -X POST "https://16ea-197-35-155-98.ngrok-free.app/job/${{ secrets.JENKINS_JOB_NAME }}/build?token=${{ secrets.JENKINS_TOKEN }}" \
         --user ${{ secrets.JENKINS_USERNAME }}:${{ secrets.JENKINS_API_TOKEN }}
