@@ -85,8 +85,12 @@ pipeline {
                     sh "curl -s http://localhost:${HOST_PORT} || true"
 			
 		    // setup monitoring tool 
+		    sh "docker rm -f node_exporter || true"
+		    sh "docker rm -f grafana || true"
+		    sh "docker rm -f prometheus || true"
+		    sh "docker rm -f cadvisor || true"
 		    sh "cd /home/ec2-user/monitoring"
-		    sh "sudo docker-compose stop"
+		
 		    sh "sudo docker-compose up -d"
 		    
                 }
