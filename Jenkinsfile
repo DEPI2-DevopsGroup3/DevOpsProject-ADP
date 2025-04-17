@@ -86,7 +86,7 @@ pipeline {
 
 		    // startup monitoring tools
 		    sh "cd /home/ec2-user/monitoring/"
-		    sh "sudo docker-compose up -d"
+		    sh "sudo /usr/local/bin/docker-compose up -d"
                 }
             }
         }
