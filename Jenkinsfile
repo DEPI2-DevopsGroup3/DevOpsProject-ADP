@@ -85,7 +85,7 @@ pipeline {
                     sh "curl -s http://localhost:${HOST_PORT} || true"
 
 		    // startup monitoring tools
-		    sh "cd /home/ec2-user/monitoring/"
+		    sh "cd /home/ec2-user/monitoring"
 		    sh "sudo /usr/local/bin/docker-compose up -d"
                 }
             }
