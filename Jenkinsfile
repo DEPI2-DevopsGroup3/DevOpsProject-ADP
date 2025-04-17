@@ -98,9 +98,9 @@ post {
 <${env.BUILD_URL}|View the Jenkins build>
 
 *Monitoring Tools:*
-• <http://13.60.41.46:9090|Prometheus>
-• <http://13.60.41.46:3000|Grafana>
-• <http://13.60.41.46:8080|cAdvisor>
+• <http://54.161.94.132:9090|Prometheus>
+• <http://54.161.94.132:3000|Grafana>
+• <http://54.161.94.132:8080|cAdvisor>
 """
 .trim(),
       teamDomain: 'DEPI2-DevopsGroup3',
