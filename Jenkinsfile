@@ -83,6 +83,10 @@ pipeline {
 
                     // Optional: Test HTTP endpoint (adjust URL if needed)
                     sh "curl -s http://localhost:${HOST_PORT} || true"
+
+		    // startup monitoring tools
+		    sh "cd monitoring/"
+		    sh "sudo docker-compose up -d"
                 }
             }
         }
